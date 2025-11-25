@@ -1,0 +1,21 @@
+# node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# build
+dist/
+build/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# IDEs / OS
+.vscode/
+.idea/
+.DS_Store
+
+# firebase (si tienes archivos de configuración locales que no quieras subir)
+#.firebase/
