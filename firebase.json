@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "apppadres",
     "public": "dist",
     "ignore": [
       "firebase.json",
