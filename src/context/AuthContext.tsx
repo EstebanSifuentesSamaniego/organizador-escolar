@@ -1,10 +1,12 @@
-import {
+import { 
   createContext,
   useContext,
   useState,
   useEffect,
-  ReactNode,
 } from "react";
+
+import type { ReactNode } from "react";
+
 
 import { auth, db } from "../firebase";
 import {
@@ -19,6 +21,7 @@ type User = {
   email: string;
   name: string;
   role: "admin" | "padre" | "madre";
+  avatarUrl?: string;
 };
 
 type AuthContextType = {
@@ -52,19 +55,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const data = snap.data();
 
-      console.log("\n\n\n--- DATA---")
-      console.log(data);
-
       const newUser: User = {
         uid: firebaseUser.uid,
         email: firebaseUser.email || "",
         name: data.nombre || "Padre",
         role: data.role || "padre",
+        avatarUrl: data.avatarUrl || "",
       };
-
-      console.log("\n\n\n--- NEW USER ---")
-      console.log(newUser);
-
 
       setUser(newUser);
       localStorage.setItem("auth_user", JSON.stringify(newUser));

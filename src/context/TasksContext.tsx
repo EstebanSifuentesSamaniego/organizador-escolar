@@ -1,10 +1,12 @@
-import {
+import { 
   createContext,
   useContext,
   useState,
   useEffect,
-  ReactNode,
 } from "react";
+
+import type { ReactNode } from "react";
+
 import {
   collection,
   addDoc,
@@ -49,11 +51,18 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   // ==========================
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "tareas"), (snapshot) => {
-      const data: Tarea[] = snapshot.docs.map((d) => ({
+      const data: Tarea[] = snapshot.docs.map((d) => {
+      const raw = d.data();
+
+      return {
         id: d.id,
-        ...d.data(),
-        fechaDeEntrega: d.data().fechaDeEntrega?.toDate(),
-      }));
+        titulo: raw.titulo || "",
+        descripcion: raw.descripcion || "",
+        fechaDeEntrega: raw.fechaDeEntrega?.toDate() || new Date(),
+        imagenes: raw.imagenes || [],
+      };
+    });
+
       setTareas(data);
     });
 
@@ -148,10 +157,14 @@ export function TasksProvider({ children }: { children: ReactNode }) {
 
     if (!snap.exists()) return null;
 
+    const raw = snap.data();
+
     const copia: Tarea = {
       id,
-      ...snap.data(),
-      fechaDeEntrega: snap.data().fechaDeEntrega?.toDate(),
+      titulo: raw.titulo || "",
+      descripcion: raw.descripcion || "",
+      fechaDeEntrega: raw.fechaDeEntrega?.toDate() || new Date(),
+      imagenes: raw.imagenes || [],
     };
 
     await deleteDoc(refDoc);

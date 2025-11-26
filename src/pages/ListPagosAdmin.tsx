@@ -7,8 +7,8 @@ import { useToast } from "../context/ToastContext";
 import { Trash2, Pencil, Check, X } from "lucide-react";
 
 export default function ListPagosAdmin() {
-  const { id } = useParams(); // ✅ SE ARREGLA AQUÍ
-  const { pagos, eliminarPago, updatePago, marcarPagado, desmarcarPago, agregarPagoCompleto } =
+  const { id } = useParams();
+  const { pagos, eliminarPago, updatePago, marcarPagado, desmarcarPago, agregarPago } =
     usePagos();
   const { padres } = usePadres();
   const { user } = useAuth();
@@ -18,11 +18,9 @@ export default function ListPagosAdmin() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editConcepto, setEditConcepto] = useState("");
   const [editMonto, setEditMonto] = useState(0);
-
   const [modalUrl, setModalUrl] = useState<string | null>(null);
 
-  // 🔥 Filtramos SOLO el pago abierto desde /pagos/:id
-  const pagoSeleccionado = pagos.find((p) => p.id === id); // ← CAMBIO AQUÍ
+  const pagoSeleccionado = pagos.find((p) => p.id === id);
 
   if (!pagoSeleccionado) {
     return (
@@ -34,38 +32,36 @@ export default function ListPagosAdmin() {
           <span className="text-xl">←</span>
           <span>Regresar</span>
         </button>
-        <p className="text-center text-lg text-red-600">
-          No se encontró este pago.
-        </p>
+        <p className="text-center text-lg text-red-600">No se encontró este pago.</p>
       </div>
     );
   }
 
-  // Editar pago
   const startEdit = (pago: typeof pagos[0]) => {
     setEditingId(pago.id);
     setEditConcepto(pago.concepto);
     setEditMonto(pago.monto);
   };
 
-  const handleGuardar = (id: string) => {
-    updatePago(id, { concepto: editConcepto, monto: editMonto });
+  const handleGuardar = async (id: string) => {
+    await updatePago(id, { concepto: editConcepto, monto: editMonto });
     showToast({ text: "Pago actualizado correctamente" });
     setEditingId(null);
   };
 
-  // Eliminar pago con deshacer
-  const handleEliminar = (id: string) => {
-    const copia = eliminarPago(id);
-    if (!copia) return;
+  // 🔥 Restaurado: eliminar + deshacer + volver atrás
+  const handleEliminar = async (id: string) => {
+    const pagoEliminado = await eliminarPago(id);
+
+    if (!pagoEliminado) return;
 
     showToast({
       text: "Pago eliminado",
       actionLabel: "Deshacer",
-      onAction: () => {
-        agregarPagoCompleto(copia);
-      },
+      onAction: () => agregarPago(pagoEliminado),
     });
+
+    navigate(-1);
   };
 
   return (
@@ -141,7 +137,6 @@ export default function ListPagosAdmin() {
               )}
             </div>
 
-            {/* Lista de todos los padres con su estado de pago */}
             <div className="mt-3 flex flex-col gap-1">
               {padres.map((padre) => {
                 const yaPago = pagoSeleccionado.padresIds.includes(padre.id);
@@ -202,7 +197,6 @@ export default function ListPagosAdmin() {
         )}
       </div>
 
-      {/* Modal comprobante */}
       {modalUrl && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
@@ -212,7 +206,11 @@ export default function ListPagosAdmin() {
             className="bg-white rounded-md shadow-lg max-w-[90%] max-h-[90%] overflow-auto p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <img src={modalUrl} alt="Comprobante" className="max-w-full max-h-[80vh] object-contain" />
+            <img
+              src={modalUrl}
+              alt="Comprobante"
+              className="max-w-full max-h-[80vh] object-contain"
+            />
             <div className="mt-3 flex justify-end">
               <button
                 onClick={() => setModalUrl(null)}

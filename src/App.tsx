@@ -2,7 +2,6 @@
 import { Routes, Route } from "react-router-dom";
 
 import Layout from "./components/Layout";
-import Home from "./pages/Home"; // opcional si Home ya no se usa como listado
 import Tareas from "./pages/Tareas";
 import Materiales from "./pages/Materiales";
 import Calendario from "./pages/Calendario";
@@ -10,7 +9,6 @@ import NuevaTarea from "./pages/NuevaTarea";
 import DetalleTarea from "./pages/DetalleTarea";
 import DetalleAviso from "./pages/DetalleAviso"
 import DetalleMaterial from "./pages/DetalleMaterial"
-import DetallePago from "./pages/DetallePago"
 import EditarMaterial from "./pages/EditarMaterial"
 import Avisos from "./pages/Avisos";
 import NuevoMaterial from "./pages/NuevoMaterial";

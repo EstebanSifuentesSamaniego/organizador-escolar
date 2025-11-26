@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import { useMaterials } from "../context/MaterialsContext";
 import { useToast } from "../context/ToastContext";
-import { useAuth } from "../context/AuthContext";
 
 export default function NuevoMaterial() {
   const navigate = useNavigate();
   const { crearAviso } = useMaterials();
   const { showToast } = useToast();
-  const { user } = useAuth();
 
   const [paso, setPaso] = useState(1);
   const [titulo, setTitulo] = useState("");

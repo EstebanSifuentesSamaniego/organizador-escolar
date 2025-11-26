@@ -38,7 +38,6 @@ export default function DetalleAviso() {
       onAction: async () => {
         addAviso({
           ...copia,
-          id: copia.id, // mismo ID o nuevo si así lo deseas
         });
       },
     });

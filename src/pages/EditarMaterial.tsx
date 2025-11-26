@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import { useMaterials } from "../context/MaterialsContext";
@@ -17,7 +17,6 @@ export default function EditarMaterial() {
   const [descripcion, setDescripcion] = useState("");
   const [materialInput, setMaterialInput] = useState("");
   const [materiales, setMateriales] = useState<string[]>([]);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!aviso) return;
