@@ -73,10 +73,6 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-deep-navy/70">
-          <p><strong>Admin:</strong> admin@escuela.com / 123456</p>
-          <p><strong>Padre:</strong> padre@escuela.com / 123456</p>
-        </div>
       </div>
     </div>
   );
